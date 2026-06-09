@@ -1,0 +1,197 @@
+[
+  {
+    "id": "packer_upx",
+    "name": "UPX packer indicators",
+    "category": "packer",
+    "severity": "medium",
+    "confidence": 0.82,
+    "indicators": {
+      "sections": ["UPX0", "UPX1"],
+      "strings": ["UPX!"]
+    },
+    "recommendation": "Try upx -d on a copy and compare imports/strings after unpacking."
+  },
+  {
+    "id": "packer_vmprotect",
+    "name": "VMProtect indicators",
+    "category": "obfuscation",
+    "severity": "high",
+    "confidence": 0.78,
+    "indicators": {
+      "strings": ["VMProtect", ".vmp", "vmp0", "vmp1"],
+      "sections": [".vmp", "vmp0", "vmp1"]
+    },
+    "recommendation": "Expect virtualized control flow; prioritize runtime tracing and API boundary hooks."
+  },
+  {
+    "id": "packer_themida",
+    "name": "Themida/WinLicense indicators",
+    "category": "obfuscation",
+    "severity": "high",
+    "confidence": 0.78,
+    "indicators": {
+      "strings": ["Themida", "WinLicense", "Oreans"],
+      "sections": [".themida", ".winlice"]
+    },
+    "recommendation": "Use anti-anti-debug setup and dump after unpacking."
+  },
+  {
+    "id": "packer_enigma",
+    "name": "Enigma Protector indicators",
+    "category": "obfuscation",
+    "severity": "high",
+    "confidence": 0.72,
+    "indicators": {
+      "strings": ["Enigma Protector", "Enigma Virtual Box"],
+      "sections": [".enigma"]
+    },
+    "recommendation": "Inspect virtualization, resource packing, and loader behavior."
+  },
+  {
+    "id": "packer_mpress_aspack",
+    "name": "MPRESS/ASPack packer indicators",
+    "category": "packer",
+    "severity": "medium",
+    "confidence": 0.72,
+    "indicators": {
+      "strings": ["MPRESS", "ASPack", "Alexey Solodovnikov"],
+      "sections": [".aspack", ".adata", "MPRESS1", "MPRESS2"]
+    },
+    "recommendation": "Try packer-specific unpacking first, then compare imports and entropy after dumping."
+  },
+  {
+    "id": "packer_dotnet_protectors",
+    "name": ".NET protector indicators",
+    "category": "obfuscation",
+    "severity": "medium",
+    "confidence": 0.7,
+    "indicators": {
+      "strings": ["ConfuserEx", ".NET Reactor", "Eazfuscator", "SmartAssembly", "Babel Obfuscator"]
+    },
+    "recommendation": "Use dnSpy/ILSpy plus deobfuscator-specific cleanup before trusting method names or control flow."
+  },
+  {
+    "id": "packer_pyinstaller_autoit",
+    "name": "Script-to-binary packer indicators",
+    "category": "packer",
+    "severity": "medium",
+    "confidence": 0.72,
+    "indicators": {
+      "strings": ["PyInstaller", "pyi_rth", "PYZ-00.pyz", "AutoIt", "AUTOIT"]
+    },
+    "recommendation": "Extract the bundled script/archive first and rerun solve on recovered Python/AutoIt artifacts."
+  },
+  {
+    "id": "license_armadillo",
+    "name": "Armadillo licensing/protector indicators",
+    "category": "license",
+    "severity": "medium",
+    "confidence": 0.72,
+    "indicators": {
+      "strings": ["Armadillo", "SoftwarePassport", "license key", "activation"]
+    },
+    "recommendation": "Trace license failure strings and hardware fingerprint calls."
+  },
+  {
+    "id": "anti_debug_winapi",
+    "name": "Windows anti-debugging API usage",
+    "category": "anti_analysis",
+    "severity": "medium",
+    "confidence": 0.76,
+    "indicators": {
+      "imports": ["IsDebuggerPresent", "CheckRemoteDebuggerPresent", "NtQueryInformationProcess", "OutputDebugStringA", "OutputDebugStringW"]
+    },
+    "recommendation": "Hook or patch these checks and log the following conditional branches."
+  },
+  {
+    "id": "anti_vm_strings",
+    "name": "Virtual machine detection strings",
+    "category": "anti_analysis",
+    "severity": "medium",
+    "confidence": 0.65,
+    "indicators": {
+      "strings": ["VMware", "VirtualBox", "VBox", "QEMU", "sandbox", "wine_get_unix_file_name"]
+    },
+    "recommendation": "Run with VM artifacts masked and compare execution traces."
+  },
+  {
+    "id": "anti_debug_linux",
+    "name": "Linux anti-debugging API usage",
+    "category": "anti_analysis",
+    "severity": "medium",
+    "confidence": 0.74,
+    "indicators": {
+      "imports": ["ptrace", "prctl", "getppid"],
+      "strings": ["TracerPid", "/proc/self/status", "LD_PRELOAD"]
+    },
+    "recommendation": "Hook ptrace/prctl, patch TracerPid checks, and compare branch traces with and without the bypass."
+  },
+  {
+    "id": "crypto_wincrypt",
+    "name": "Windows CryptoAPI/BCrypt usage",
+    "category": "crypto",
+    "severity": "medium",
+    "confidence": 0.7,
+    "indicators": {
+      "imports": ["CryptAcquireContextA", "CryptAcquireContextW", "CryptDecrypt", "CryptEncrypt", "CryptGenRandom", "BCryptDecrypt", "BCryptEncrypt"]
+    },
+    "recommendation": "Dump buffers at crypto API boundaries to recover keys, plaintext, or transformed input."
+  },
+  {
+    "id": "crypto_openssl_libcrypto",
+    "name": "OpenSSL/libcrypto usage",
+    "category": "crypto",
+    "severity": "medium",
+    "confidence": 0.72,
+    "indicators": {
+      "imports": ["EVP_EncryptInit_ex", "EVP_DecryptInit_ex", "AES_set_encrypt_key", "AES_encrypt", "SHA256", "MD5", "RC4"],
+      "strings": ["libcrypto", "OpenSSL", "EVP_", "AES-", "SHA256", "RC4"]
+    },
+    "recommendation": "Hook EVP/AES/SHA boundaries and dump input, key, IV, and output buffers."
+  },
+  {
+    "id": "network_http",
+    "name": "HTTP/network client indicators",
+    "category": "network",
+    "severity": "medium",
+    "confidence": 0.68,
+    "indicators": {
+      "imports": ["InternetOpenA", "InternetOpenW", "InternetOpenUrlA", "InternetOpenUrlW", "WinHttpOpen", "WinHttpConnect", "connect", "send", "recv"],
+      "regex": ["https?://[^\\s\\\"']+"]
+    },
+    "recommendation": "Capture traffic in an isolated network and correlate endpoints with code references."
+  },
+  {
+    "id": "ctf_flag_strings",
+    "name": "CTF success/failure/string anchors",
+    "category": "ctf",
+    "severity": "high",
+    "confidence": 0.82,
+    "indicators": {
+      "strings": ["flag", "DreamHack", "correct", "wrong", "password", "serial", "congrat"]
+    },
+    "recommendation": "Use xrefs to these strings as the primary path to the verifier."
+  },
+  {
+    "id": "ctf_dreamhack_patterns",
+    "name": "DreamHack-style CTF indicators",
+    "category": "ctf",
+    "severity": "high",
+    "confidence": 0.84,
+    "indicators": {
+      "strings": ["DH{", "DreamHack", "dreamhack", "Correct!", "Wrong!", "Input:"]
+    },
+    "recommendation": "Prioritize direct solve mode, comparison hooks, and encoded-string decoders for DH{} recovery."
+  },
+  {
+    "id": "packed_entropy",
+    "name": "High entropy binary body",
+    "category": "packer",
+    "severity": "medium",
+    "confidence": 0.55,
+    "indicators": {
+      "entropy_min": 7.35
+    },
+    "recommendation": "Validate with DIE/capa/FLOSS and inspect whether imports are sparse."
+  }
+]

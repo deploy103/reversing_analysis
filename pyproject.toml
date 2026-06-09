@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reverse-researcher"
+version = "0.1.0"
+description = "Semi-automated reverse engineering research assistant and collector pipeline."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Reverse Researcher" }]
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+revbot = "revbot.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["revbot*"]
+
